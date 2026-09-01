@@ -9,11 +9,10 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Sync upstream changes
-        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
-        with:
-          target_sync_branch: main
-          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
-          upstream_sync_branch: main
-          upstream_sync_repo: frankzniu-bit/YCN
-          test_mode: true  # Prevents code 128 failure when repositories are identical
+      - name: Checkout target repo
+        uses: actions/checkout@v4
+
+      - name: Sync upstream changes natively
+        run: gh repo sync davidbrownn/YCN -b main
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
