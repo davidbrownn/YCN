@@ -1,0 +1,18 @@
+name: Sync Fork
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Checks for updates automatically every hour
+  workflow_dispatch: # Gives you a manual button to sync whenever you want
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync upstream changes
+        uses: aormsby/Fork-Sync-With-Upstream-action@v3.4.1
+        with:
+          target_sync_branch: main
+          target_repo_token: ${{ secrets.GITHUB_TOKEN }}
+          upstream_sync_branch: main
+          upstream_sync_repo: frankzniu-bit/YCN
