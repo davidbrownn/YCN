@@ -377,7 +377,7 @@ def shell(root, title, description, body, active, extra_head=""):
       </ul>
     </nav>
 
-    <a class="btn btn--primary btn--sm site-header__cta" href="mailto:youthcivicsnetwork@gmail.com">Join / Volunteer</a>
+    <a class="btn btn--primary btn--sm site-header__cta" href="https://linktr.ee/youth.civics.network">Join / Volunteer</a>
 
     <button class="menu-toggle" id="menu-toggle" aria-expanded="false" aria-controls="mobile-nav">
       <span class="sr-only">Toggle menu</span>
@@ -390,7 +390,7 @@ def shell(root, title, description, body, active, extra_head=""):
   <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile">
     <ul>
 {mob_html}
-      <li><a class="btn btn--primary" href="mailto:youthcivicsnetwork@gmail.com">Join / Volunteer</a></li>
+      <li><a class="btn btn--primary" href="https://linktr.ee/youth.civics.network">Join / Volunteer</a></li>
     </ul>
   </nav>
 </header>
