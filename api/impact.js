@@ -14,7 +14,7 @@
  * and only the running total goes cold.
  */
 
-const BASELINE_STUDENTS = 600; // children reached before the public library opened
+const BASELINE_STUDENTS = 1000; // children reached before the public library opened
 const KEY_STUDENTS = "ycn:students";
 const KEY_DOWNLOADS = "ycn:downloads";
 const KEY_RECORDS = "ycn:records";
