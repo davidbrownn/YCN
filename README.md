@@ -73,7 +73,7 @@ Returns every submission as CSV — date, role, students, email, lesson.
 
 ### The baseline
 
-`BASELINE_STUDENTS` in `api/impact.js` is the 600 children reached before the
+`BASELINE_STUDENTS` in `api/impact.js` is the 1,000 children reached before the
 public library opened. The displayed figure is that baseline plus everything
 reported since. Raise the baseline when chapter-taught numbers grow; don't
 count those students twice.
