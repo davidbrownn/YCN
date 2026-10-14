@@ -465,8 +465,9 @@ section:not(.hero):not(.signature) { padding-block: var(--section-padding); }
   color: rgba(255, 255, 255, 0.85); /* 0.65 measured 3.81:1 on sage-dark, below the 4.5:1 floor for this small text */
 }
 
-/* Five figures need an intermediate step — at tablet widths the labels
-   ("Organization Partnerships") collide well before the numbers do. */
+/* Five figures need an intermediate step: below about 984px the "Local
+   Chapters" label wraps to a second line while the other four do not,
+   which leaves the row visibly ragged. */
 @media (max-width: 1000px) {
   .stats__grid { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
   .stat:nth-child(3n + 1) { padding-left: 0; border-left: 0; }
@@ -1141,6 +1142,91 @@ body.is-modal-open { overflow: hidden; }
 
 @media (max-width: 900px) {
   .lesson__actions { flex-direction: column; }
+}
+
+/* ==========================================================================
+   Logo wall
+
+   Shared by the homepage and the partners page. Partner marks arrive in
+   whatever shape and background their own brand uses — a square icon, a wide
+   lockup on a coloured block — so each sits in a fixed-height row and is
+   contained rather than cropped. No card chrome: the logos are the content.
+   ========================================================================== */
+
+.logo-wall {
+  background: var(--cream-raised);
+  padding-block: 88px;
+}
+
+.logo-wall__label {
+  text-align: center;
+  font-size: var(--step--1);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--medium-gray);
+}
+
+.logo-wall__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 40px;
+  align-items: start;
+  margin-top: 52px;
+}
+
+.logo-wall__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.logo-wall__link:hover { opacity: 0.72; }
+
+/* One fixed-height row puts every mark on the same horizontal axis. The cap
+   is px rather than 100% — a percentage resolves against an auto-sized box
+   and SVGs ignore it — and each logo carries its own --logo-h, because a
+   square icon reads much smaller than a wide lockup at identical height. */
+.logo-wall__plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+}
+.logo-wall__plate img {
+  max-height: var(--logo-h, 44px);
+  max-width: 190px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+
+/* Captioned like the classroom photographs: a tracked sage label over the
+   sentence, rather than a ruled-off footnote. */
+.logo-wall__note {
+  margin-top: 52px;
+  margin-inline: auto;
+  max-width: 46ch;
+  text-align: center;
+  font-size: var(--step--1);
+  color: var(--medium-gray);
+}
+.logo-wall__note-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage-ink);
+}
+
+@media (max-width: 720px) {
+  .logo-wall { padding-block: 64px; }
+  .logo-wall__grid { grid-template-columns: 1fr; gap: 44px; margin-top: 40px; }
+  .logo-wall__plate { height: 52px; }
+  .logo-wall__plate img { max-height: calc(var(--logo-h, 44px) * 0.9); max-width: 170px; }
 }
 
 /* ==========================================================================
