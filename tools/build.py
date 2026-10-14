@@ -228,6 +228,70 @@ TRACKS = [
     },
 ]
 
+# --------------------------------------------------------------------------
+# Partners — logos only; the wall is shared by the homepage and /partners.
+# --------------------------------------------------------------------------
+
+PARTNERS = [
+    {
+        "name": "Doorstop Education",
+        "url": "https://doorstopeducation.org/",
+        "logo": "assets/partners/doorstopeducation.svg",
+        "blurb": "A student-voice nonprofit working to get young people heard in the "
+                 "decisions schools make about them.",
+    },
+    {
+        "name": "Youth Policymakers for Tomorrow",
+        "url": "https://youthpolicymakers.org/",
+        "logo": "assets/partners/youthpolicymakers.png",
+        "blurb": "A youth-led organization addressing the underrepresentation of young "
+                 "people in policymaking.",
+    },
+    {
+        "name": "Students Engaged in Advancing Texas",
+        "url": "https://www.studentsengaged.org/",
+        "logo": "assets/partners/studentsengaged.svg",
+        "blurb": "SEAT organizes Texas students to advocate for public education at the "
+                 "state capitol.",
+    },
+]
+
+DISCLAIMER = "School and district partnerships aren\u2019t shown here."
+
+
+def logo_wall(root, label="Partnered with", named=False, tail=""):
+    """The logo wall. `named` adds the organisation name and blurb beneath
+    each mark, which the partners page wants and the homepage does not."""
+    items = []
+    for p in PARTNERS:
+        inner = (f'<img src="{root}{p["logo"]}" alt="{html.escape(p["name"])}" '
+                 f'loading="lazy" decoding="async">')
+        if named:
+            items.append(f"""        <li class="logo-wall__item">
+          <a class="logo-wall__link" href="{p["url"]}" rel="noopener">
+            <span class="logo-wall__plate">{inner}</span>
+            <span class="logo-wall__name">{html.escape(p["name"])}</span>
+          </a>
+          <p class="logo-wall__blurb">{html.escape(p["blurb"])}</p>
+        </li>""")
+        else:
+            items.append(f"""        <li class="logo-wall__item">
+          <a class="logo-wall__link" href="{p["url"]}" rel="noopener"
+             aria-label="{html.escape(p["name"])}">
+            <span class="logo-wall__plate">{inner}</span>
+          </a>
+        </li>""")
+    return f"""  <section class="logo-wall">
+    <div class="inner">
+      <p class="logo-wall__label">{label}</p>
+      <ul class="logo-wall__grid">
+{chr(10).join(items)}
+      </ul>
+      <p class="logo-wall__note">{DISCLAIMER}{tail}</p>
+    </div>
+  </section>"""
+
+
 SECTION_PATTERNS = [
     ("warmup", re.compile(r"^\s*(?:\d+[\.\)]\s*)?warm[\s\-–]?up\b", re.I)),
     ("lecture", re.compile(r"^\s*(?:\d+[\.\)]\s*)?(?:lecture|lectures|opens\s+w/)", re.I)),
@@ -333,6 +397,7 @@ def shell(root, title, description, body, active, extra_head=""):
     nav = [
         ("About", r("about.html"), "about"),
         ("Curriculum", r("curriculum.html"), "curriculum"),
+        ("Partners", r("partners.html"), "partners"),
         ("Get Involved", r("get-involved.html"), "get-involved"),
     ]
     CUR = ' aria-current="page"'
@@ -425,6 +490,7 @@ def footer(root):
       <ul>
         <li><a href="{r('about.html')}">About</a></li>
         <li><a href="{r('curriculum.html')}">Curriculum</a></li>
+        <li><a href="{r('partners.html')}">Partners</a></li>
         <li><a href="{r('get-involved.html')}">Get Involved</a></li>
       </ul>
     </div>
@@ -687,7 +753,43 @@ def build():
             "curriculum",
         ))
 
-    print(f"built {total} lesson pages + curriculum.html")
+    # ---- partners page ----
+    pbody = """<section class="page-head">
+  <div class="inner">
+    <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span>Partners</p>
+    <h1>The organizations we work alongside.</h1>
+    <p class="page-head__lede">Youth-led groups doing the same work from different
+       angles — student voice, policy representation, and state-level advocacy.</p>
+  </div>
+</section>
+
+""" + logo_wall("", label="Our partners", named=True) + """
+
+<section class="cta-band">
+  <div class="inner cta-band__inner">
+    <h2>Work with us</h2>
+    <p>If your organization is doing adjacent work and you'd like to collaborate,
+       we'd like to hear from you.</p>
+    <a class="btn btn--primary" href="mailto:youthcivicsnetwork@gmail.com">Get in touch</a>
+  </div>
+</section>"""
+
+    with open(os.path.join(ROOT, "partners.html"), "w") as f:
+        f.write(shell(
+            "",
+            "Partners — Youth Civics Network",
+            "The youth-led organizations Youth Civics Network partners with, including "
+            "Doorstop Education, Youth Policymakers for Tomorrow, and SEAT.",
+            pbody,
+            "partners",
+        ))
+
+    # the homepage wall, written to a fragment so index.html can be patched
+    with open(os.path.join(ROOT, "tools", "_home-wall.html"), "w") as f:
+        f.write(logo_wall("", label="Partnered with",
+                          tail=' <a href="partners.html">More about our partners</a>'))
+
+    print(f"built {total} lesson pages + curriculum.html + partners.html")
 
 
 if __name__ == "__main__":
