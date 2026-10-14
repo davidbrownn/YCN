@@ -465,8 +465,9 @@ section:not(.hero):not(.signature) { padding-block: var(--section-padding); }
   color: rgba(255, 255, 255, 0.85); /* 0.65 measured 3.81:1 on sage-dark, below the 4.5:1 floor for this small text */
 }
 
-/* Five figures need an intermediate step — at tablet widths the labels
-   ("Organization Partnerships") collide well before the numbers do. */
+/* Five figures need an intermediate step: below about 984px the "Local
+   Chapters" label wraps to a second line while the other four do not,
+   which leaves the row visibly ragged. */
 @media (max-width: 1000px) {
   .stats__grid { grid-template-columns: repeat(3, 1fr); row-gap: 40px; }
   .stat:nth-child(3n + 1) { padding-left: 0; border-left: 0; }
