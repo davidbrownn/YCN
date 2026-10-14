@@ -261,27 +261,19 @@ PARTNERS = [
     },
 ]
 
-DISCLAIMER = "School and district partnerships aren\u2019t shown here."
+NOTE_LABEL = "Not pictured"
+NOTE_TEXT = ("We also partner directly with school districts, which aren\u2019t "
+             "shown here.")
 
 
-def logo_wall(root, label="Partnered with", named=False, tail=""):
-    """The logo wall. `named` adds the organisation name and blurb beneath
-    each mark, which the partners page wants and the homepage does not."""
+def logo_wall(root, label="Partnered with"):
+    """The partner logo wall."""
     items = []
     for p in PARTNERS:
         inner = (f'<img src="{root}{p["logo"]}" alt="{html.escape(p["name"])}" '
                  f'style="--logo-h: {p.get("logo_h", 44)}px" '
                  f'loading="lazy" decoding="async">')
-        if named:
-            items.append(f"""        <li class="logo-wall__item">
-          <a class="logo-wall__link" href="{p["url"]}" rel="noopener">
-            <span class="logo-wall__plate">{inner}</span>
-            <span class="logo-wall__name">{html.escape(p["name"])}</span>
-          </a>
-          <p class="logo-wall__blurb">{html.escape(p["blurb"])}</p>
-        </li>""")
-        else:
-            items.append(f"""        <li class="logo-wall__item">
+        items.append(f"""        <li class="logo-wall__item">
           <a class="logo-wall__link" href="{p["url"]}" rel="noopener"
              aria-label="{html.escape(p["name"])}">
             <span class="logo-wall__plate">{inner}</span>
@@ -293,7 +285,10 @@ def logo_wall(root, label="Partnered with", named=False, tail=""):
       <ul class="logo-wall__grid">
 {chr(10).join(items)}
       </ul>
-      <p class="logo-wall__note">{DISCLAIMER}{tail}</p>
+      <p class="logo-wall__note">
+        <span class="logo-wall__note-label">{NOTE_LABEL}</span>
+        {NOTE_TEXT}
+      </p>
     </div>
   </section>"""
 
@@ -428,7 +423,6 @@ def shell(root, title, description, body, active, extra_head=""):
     nav = [
         ("About", r("about.html"), "about"),
         ("Curriculum", r("curriculum.html"), "curriculum"),
-        ("Partners", r("partners.html"), "partners"),
         ("Get Involved", r("get-involved.html"), "get-involved"),
     ]
     CUR = ' aria-current="page"'
@@ -521,7 +515,6 @@ def footer(root):
       <ul>
         <li><a href="{r('about.html')}">About</a></li>
         <li><a href="{r('curriculum.html')}">Curriculum</a></li>
-        <li><a href="{r('partners.html')}">Partners</a></li>
         <li><a href="{r('get-involved.html')}">Get Involved</a></li>
       </ul>
     </div>
@@ -784,42 +777,10 @@ def build():
             "curriculum",
         ))
 
-    # ---- partners page ----
-    pbody = """<section class="page-head">
-  <div class="inner">
-    <p class="eyebrow"><span class="eyebrow__rule" aria-hidden="true"></span>Partners</p>
-    <h1>The organizations we work alongside.</h1>
-    <p class="page-head__lede">Youth-led groups doing the same work from different
-       angles — student voice, policy representation, and state-level advocacy.</p>
-  </div>
-</section>
-
-""" + logo_wall("", label="Our partners", named=True) + """
-
-<section class="cta-band">
-  <div class="inner cta-band__inner">
-    <h2>Work with us</h2>
-    <p>If your organization is doing adjacent work and you'd like to collaborate,
-       we'd like to hear from you.</p>
-    <a class="btn btn--primary" href="mailto:youthcivicsnetwork@gmail.com">Get in touch</a>
-  </div>
-</section>"""
-
-    with open(os.path.join(ROOT, "partners.html"), "w") as f:
-        f.write(shell(
-            "",
-            "Partners — Youth Civics Network",
-            "The youth-led organizations Youth Civics Network partners with, including "
-            "Doorstop Education, Youth Policymakers for Tomorrow, and SEAT.",
-            pbody,
-            "partners",
-        ))
-
     # ---- homepage wall ----
     # index.html is hand-maintained, but the wall inside it is not: it is
     # rewritten from the same component here so the two can never diverge.
-    home_wall = logo_wall("", label="Partnered with",
-                          tail=' <a href="partners.html">More about our partners</a>')
+    home_wall = logo_wall("", label="Partnered with")
     home_path = os.path.join(ROOT, "index.html")
     with open(home_path) as f:
         home = f.read()
@@ -832,7 +793,7 @@ def build():
             f.write(home)
 
     css_v, js_v = stamp_assets()
-    print(f"built {total} lesson pages + curriculum.html + partners.html")
+    print(f"built {total} lesson pages + curriculum.html")
     print(f"stamped assets: styles.css?v={css_v}  script.js?v={js_v}")
 
 

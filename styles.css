@@ -1201,36 +1201,24 @@ body.is-modal-open { overflow: hidden; }
   object-fit: contain;
 }
 
-.logo-wall__name {
-  font-family: var(--font-display);
-  font-optical-sizing: auto;
-  font-variation-settings: "SOFT" 20, "WONK" 1;
-  font-size: var(--step-1);
-  line-height: 1.15;
-  text-align: center;
-  color: var(--sage-dark);
-}
-.logo-wall__blurb {
-  margin-top: 10px;
-  text-align: center;
-  font-size: var(--step--1);
-  color: var(--medium-gray);
-  max-width: 34ch;
-  margin-inline: auto;
-}
 
+/* Captioned like the classroom photographs: a tracked sage label over the
+   sentence, rather than a ruled-off footnote. */
 .logo-wall__note {
-  margin-top: 56px;
-  padding-top: 22px;
-  border-top: 1px solid var(--light-gray);
+  margin-top: 52px;
+  margin-inline: auto;
+  max-width: 46ch;
   text-align: center;
   font-size: var(--step--1);
   color: var(--medium-gray);
 }
-.logo-wall__note a {
-  color: var(--sage-dark);
-  font-weight: 600;
-  border-bottom: 1.5px solid var(--sage-dark);
+.logo-wall__note-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage-ink);
 }
 
 @media (max-width: 720px) {
