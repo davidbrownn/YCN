@@ -1144,6 +1144,101 @@ body.is-modal-open { overflow: hidden; }
 }
 
 /* ==========================================================================
+   Logo wall
+
+   Shared by the homepage and the partners page. Partner marks arrive in
+   whatever shape and background their own brand uses — a square icon, a wide
+   lockup on a coloured block — so each sits in a fixed-height row and is
+   contained rather than cropped. No card chrome: the logos are the content.
+   ========================================================================== */
+
+.logo-wall {
+  background: var(--cream-raised);
+  padding-block: 88px;
+}
+
+.logo-wall__label {
+  text-align: center;
+  font-size: var(--step--1);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--medium-gray);
+}
+
+.logo-wall__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 56px 40px;
+  align-items: start;
+  margin-top: 52px;
+}
+
+.logo-wall__link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+.logo-wall__link:hover { opacity: 0.72; }
+
+/* Stated in px, not 100%: a percentage max-height resolves against an
+   auto-sized box and SVGs ignore it. */
+.logo-wall__plate {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 72px;
+}
+.logo-wall__plate img {
+  max-height: 68px;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+.logo-wall__name {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 20, "WONK" 1;
+  font-size: var(--step-1);
+  line-height: 1.15;
+  text-align: center;
+  color: var(--sage-dark);
+}
+.logo-wall__blurb {
+  margin-top: 10px;
+  text-align: center;
+  font-size: var(--step--1);
+  color: var(--medium-gray);
+  max-width: 34ch;
+  margin-inline: auto;
+}
+
+.logo-wall__note {
+  margin-top: 56px;
+  padding-top: 22px;
+  border-top: 1px solid var(--light-gray);
+  text-align: center;
+  font-size: var(--step--1);
+  color: var(--medium-gray);
+}
+.logo-wall__note a {
+  color: var(--sage-dark);
+  font-weight: 600;
+  border-bottom: 1.5px solid var(--sage-dark);
+}
+
+@media (max-width: 720px) {
+  .logo-wall { padding-block: 64px; }
+  .logo-wall__grid { grid-template-columns: 1fr; gap: 44px; margin-top: 40px; }
+  .logo-wall__plate { height: 60px; }
+  .logo-wall__plate img { max-height: 56px; }
+}
+
+/* ==========================================================================
    Get Involved — paths
    ========================================================================== */
 
