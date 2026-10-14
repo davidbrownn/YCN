@@ -9,9 +9,11 @@ alongside everything else. Re-run it after editing a lesson document:
     python3 tools/build.py
 """
 
+import hashlib
 import html
 import os
 import re
+import glob
 import shutil
 import zipfile
 
@@ -237,6 +239,7 @@ PARTNERS = [
         "name": "Doorstop Education",
         "url": "https://doorstopeducation.org/",
         "logo": "assets/partners/doorstopeducation.svg",
+        "logo_h": 46,
         "blurb": "A student-voice nonprofit working to get young people heard in the "
                  "decisions schools make about them.",
     },
@@ -244,6 +247,7 @@ PARTNERS = [
         "name": "Youth Policymakers for Tomorrow",
         "url": "https://youthpolicymakers.org/",
         "logo": "assets/partners/youthpolicymakers.png",
+        "logo_h": 50,
         "blurb": "A youth-led organization addressing the underrepresentation of young "
                  "people in policymaking.",
     },
@@ -251,6 +255,7 @@ PARTNERS = [
         "name": "Students Engaged in Advancing Texas",
         "url": "https://www.studentsengaged.org/",
         "logo": "assets/partners/studentsengaged.svg",
+        "logo_h": 38,
         "blurb": "SEAT organizes Texas students to advocate for public education at the "
                  "state capitol.",
     },
@@ -265,6 +270,7 @@ def logo_wall(root, label="Partnered with", named=False, tail=""):
     items = []
     for p in PARTNERS:
         inner = (f'<img src="{root}{p["logo"]}" alt="{html.escape(p["name"])}" '
+                 f'style="--logo-h: {p.get("logo_h", 44)}px" '
                  f'loading="lazy" decoding="async">')
         if named:
             items.append(f"""        <li class="logo-wall__item">
@@ -307,6 +313,31 @@ SECTION_LABELS = {
 }
 
 URL_RE = re.compile(r"(https?://[^\s<>\"')]+)")
+
+
+def asset_version(name):
+    """Short content hash, so a changed stylesheet can never be served from
+    a stale browser cache."""
+    with open(os.path.join(ROOT, name), "rb") as f:
+        return hashlib.sha1(f.read()).hexdigest()[:8]
+
+
+def stamp_assets():
+    """Rewrite every styles.css / script.js reference with the current hash.
+    Runs over all HTML, including the hand-maintained pages."""
+    css_v = asset_version("styles.css")
+    js_v = asset_version("script.js")
+    pages = glob.glob(os.path.join(ROOT, "*.html")) + glob.glob(os.path.join(ROOT, "lessons", "*.html"))
+    for page in pages:
+        with open(page) as f:
+            text = f.read()
+        text = re.sub(r'(href="(?:\.\./)?styles\.css)(?:\?v=[0-9a-f]+)?"',
+                      lambda m: f'{m.group(1)}?v={css_v}"', text)
+        text = re.sub(r'(src="(?:\.\./)?script\.js)(?:\?v=[0-9a-f]+)?"',
+                      lambda m: f'{m.group(1)}?v={js_v}"', text)
+        with open(page, "w") as f:
+            f.write(text)
+    return css_v, js_v
 
 
 def read_paragraphs(path):
@@ -784,12 +815,25 @@ def build():
             "partners",
         ))
 
-    # the homepage wall, written to a fragment so index.html can be patched
-    with open(os.path.join(ROOT, "tools", "_home-wall.html"), "w") as f:
-        f.write(logo_wall("", label="Partnered with",
-                          tail=' <a href="partners.html">More about our partners</a>'))
+    # ---- homepage wall ----
+    # index.html is hand-maintained, but the wall inside it is not: it is
+    # rewritten from the same component here so the two can never diverge.
+    home_wall = logo_wall("", label="Partnered with",
+                          tail=' <a href="partners.html">More about our partners</a>')
+    home_path = os.path.join(ROOT, "index.html")
+    with open(home_path) as f:
+        home = f.read()
+    marker = "  <!-- PARTNER WALL -->\n"
+    if marker in home:
+        head, rest = home.split(marker, 1)
+        _, tail = rest.split("\n  </section>\n", 1)
+        home = head + marker + home_wall + "\n" + tail
+        with open(home_path, "w") as f:
+            f.write(home)
 
+    css_v, js_v = stamp_assets()
     print(f"built {total} lesson pages + curriculum.html + partners.html")
+    print(f"stamped assets: styles.css?v={css_v}  script.js?v={js_v}")
 
 
 if __name__ == "__main__":

@@ -1183,17 +1183,19 @@ body.is-modal-open { overflow: hidden; }
 }
 .logo-wall__link:hover { opacity: 0.72; }
 
-/* Stated in px, not 100%: a percentage max-height resolves against an
-   auto-sized box and SVGs ignore it. */
+/* One fixed-height row puts every mark on the same horizontal axis. The cap
+   is px rather than 100% — a percentage resolves against an auto-sized box
+   and SVGs ignore it — and each logo carries its own --logo-h, because a
+   square icon reads much smaller than a wide lockup at identical height. */
 .logo-wall__plate {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 72px;
+  height: 56px;
 }
 .logo-wall__plate img {
-  max-height: 68px;
-  max-width: 100%;
+  max-height: var(--logo-h, 44px);
+  max-width: 190px;
   width: auto;
   height: auto;
   object-fit: contain;
@@ -1234,8 +1236,8 @@ body.is-modal-open { overflow: hidden; }
 @media (max-width: 720px) {
   .logo-wall { padding-block: 64px; }
   .logo-wall__grid { grid-template-columns: 1fr; gap: 44px; margin-top: 40px; }
-  .logo-wall__plate { height: 60px; }
-  .logo-wall__plate img { max-height: 56px; }
+  .logo-wall__plate { height: 52px; }
+  .logo-wall__plate img { max-height: calc(var(--logo-h, 44px) * 0.9); max-width: 170px; }
 }
 
 /* ==========================================================================
