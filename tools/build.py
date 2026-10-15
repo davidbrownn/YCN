@@ -251,14 +251,6 @@ PARTNERS = [
         "blurb": "A youth-led organization addressing the underrepresentation of young "
                  "people in policymaking.",
     },
-    {
-        "name": "Students Engaged in Advancing Texas",
-        "url": "https://www.studentsengaged.org/",
-        "logo": "assets/partners/studentsengaged.svg",
-        "logo_h": 38,
-        "blurb": "SEAT organizes Texas students to advocate for public education at the "
-                 "state capitol.",
-    },
 ]
 
 NOTE_LABEL = "Not pictured"
