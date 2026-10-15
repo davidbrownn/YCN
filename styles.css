@@ -1167,12 +1167,20 @@ body.is-modal-open { overflow: hidden; }
   color: var(--medium-gray);
 }
 
+/* Centred flex rather than a fixed column count: the wall stays centred for
+   however many partners are in the manifest, instead of leaving an empty
+   column behind when one is removed. */
 .logo-wall__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 56px 40px;
-  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 48px 64px;
   margin-top: 52px;
+}
+.logo-wall__item {
+  flex: 0 0 auto;
+  min-width: 200px;
 }
 
 .logo-wall__link {
@@ -1224,7 +1232,8 @@ body.is-modal-open { overflow: hidden; }
 
 @media (max-width: 720px) {
   .logo-wall { padding-block: 64px; }
-  .logo-wall__grid { grid-template-columns: 1fr; gap: 44px; margin-top: 40px; }
+  .logo-wall__grid { gap: 40px; margin-top: 40px; }
+  .logo-wall__item { min-width: 0; width: 100%; }
   .logo-wall__plate { height: 52px; }
   .logo-wall__plate img { max-height: calc(var(--logo-h, 44px) * 0.9); max-width: 170px; }
 }
