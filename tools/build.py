@@ -251,6 +251,17 @@ PARTNERS = [
         "blurb": "A youth-led organization addressing the underrepresentation of young "
                  "people in policymaking.",
     },
+    {
+        # Carnegie Young Leaders is a C&S programme and has no mark of its own,
+        # so the wall carries the C&S logo and the alt text names both.
+        "name": "Carnegie Young Leaders",
+        "alt": "C&S — Carnegie Young Leaders",
+        "url": "https://cands.org/carnegie-young-leaders/",
+        "logo": "assets/partners/carnegie-young-leaders.svg",
+        "logo_h": 40,
+        "blurb": "Carnegie Young Leaders funds and coaches 14\u201324 year olds building "
+                 "civic solutions in their own communities.",
+    },
 ]
 
 NOTE_LABEL = "Not pictured"
@@ -262,7 +273,8 @@ def logo_wall(root, label="Partnered with"):
     """The partner logo wall."""
     items = []
     for p in PARTNERS:
-        inner = (f'<img src="{root}{p["logo"]}" alt="{html.escape(p["name"])}" '
+        alt = p.get("alt", p["name"])
+        inner = (f'<img src="{root}{p["logo"]}" alt="{html.escape(alt)}" '
                  f'style="--logo-h: {p.get("logo_h", 44)}px" '
                  f'loading="lazy" decoding="async">')
         items.append(f"""        <li class="logo-wall__item">
